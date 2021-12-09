@@ -1,0 +1,13 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource>
+  <file>numpad_icon.png</file>
+  <file>gear.png</file>
+  <file>NumpadConfig.txt</file>  
+  <file>Examples/All buttons/NumpadConfig.txt</file>
+  <file>Examples/Any text/NumpadConfig.txt</file>
+  <file>Examples/Phone/NumpadConfig.txt</file>
+  <file>Examples/Standard numpad/NumpadConfig.txt</file>
+  <file>Examples/Numpad with Alt/NumpadConfig.txt</file>
+  <file>Examples/Numpad with arrows/NumpadConfig.txt</file>
+</qresource>
+</RCC>  

@@ -1,0 +1,10 @@
+[BUTTONS]
+"The " 1 1 1
+"Numpad " 2 1 2
+"can type " 2 1 4
+"whole " 2 1 6
+"words " 2 1 8
+"consisting " 2 1 10
+"of any " 2 1 12
+"characters " 2 1 14
+"479djf@$^*&)" 2 1 16
