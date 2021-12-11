@@ -11,3 +11,5 @@ HEADERS += KeyboardHook.h \
                   KeyboardHookMsg.h
 SOURCES += KeyboardHook.cpp
 CONFIG -= qt
+
+DESTDIR = $${OUT_PWD}/../install

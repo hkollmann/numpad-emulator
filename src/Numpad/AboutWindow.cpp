@@ -115,9 +115,12 @@ void AboutWindow::retranslateUi()
     "<center><img src=\":/numpad_icon.png\" width=\"50\"></center>"
     "<center><H2>Numpad " + version + "<H2></center>"   
     "<center><a href=\"https://sourceforge.net/projects/numpad-emulator/\">sourceforge.net/projects/numpad-emulator</a></center>"
-    "<br>"   
+    "<br>"
     "<center>&#169; 2019 ") + QString("Timur Abdrazyakov") + QString("</center>"
     "<center><a href=\"mailto:abtimal@gmail.com\">abtimal@gmail.com</a></center>")
+    + QString(
+    "<br>"
+    "<center><a href=\"https://github.com/hkollmann/numpad-emulator/\">github.com/hkollmann/numpad-emulator</a></center>")
    );
        
   pm_closeBtn->setText(tr("Close"));

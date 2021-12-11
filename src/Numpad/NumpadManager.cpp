@@ -60,7 +60,7 @@
 NumpadManager::NumpadManager(QWidget *p_parent/*= 0*/)
 : QWidget(p_parent), lastStInfoIndex(164), curStInfoIndex(lastStInfoIndex + 1)
 {
-    version = "1.7.1";
+    version = "1.8.0";
     appName = "Numpad_" + version;
     confFileName = "NumpadConfig.txt";
     checkConfFile();
@@ -600,6 +600,11 @@ bool NumpadManager::nativeEvent(const QByteArray &eventType, void *message, long
     Q_UNUSED(result)
     // Transform the message pointer to the MSG WinAPI
     MSG* p_msg = reinterpret_cast<MSG*>(message);
+
+    if (p_msg->message == WM_QUERYENDSESSION) {
+        qApp->quit();
+        return true;
+    }
 
     if (p_msg->message == KEYBOARDHOOKMSG)
     {
@@ -1295,19 +1300,19 @@ void NumpadManager::applyVisualConfig(QList<BtnDynamicInfo *> _btnsDyInfo)
     QTextStream textStream(&str);
     if (fileStream.atEnd())
     {
-        textStream << "[BUTTONS]" << endl;
+        textStream << "[BUTTONS]" << Qt::endl;
     }
     while (!fileStream.atEnd())
     {
         QString s = fileStream.readLine();
-        textStream << s << endl;
+        textStream << s << Qt::endl;
         if (s.contains("[BUTTONS]"))
         {
            break;
         }
         if (fileStream.atEnd())
         {
-            textStream << "[BUTTONS]" << endl;
+            textStream << "[BUTTONS]" << Qt::endl;
         }
     }
     for (int i = 0; i < _btnsDyInfo.size(); ++i)
@@ -1349,7 +1354,7 @@ void NumpadManager::applyVisualConfig(QList<BtnDynamicInfo *> _btnsDyInfo)
         textStream << row << " ";
         int column = di->column;
         ++column;
-        textStream << column << endl;
+        textStream << column << Qt::endl;
     }
     confFile.resize(0);
     fileStream << str;

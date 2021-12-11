@@ -1,4 +1,3 @@
-
 TEMPLATE = app
 TARGET = Numpad_1.7.1
 DEPENDPATH += . Buttons
@@ -50,4 +49,13 @@ SOURCES += AboutWindow.cpp \
 RESOURCES += resourse.qrc
 RC_FILE = numpad.rc
 
+DESTDIR = $${OUT_PWD}/../install
 
+windows  {
+   DEPLOYMENT_PLUGIN = windeployqt
+   MY_TARGET = $${TARGET}.exe
+}
+
+DEPLOY = "$$QMAKE_QMAKE/../$${DEPLOYMENT_PLUGIN} $${DESTDIR}/$${MY_TARGET}"
+message($${DEPLOY})
+QMAKE_POST_LINK = $${DEPLOY}
