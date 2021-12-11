@@ -96,6 +96,9 @@ Numpad::Numpad(NumpadManager *_nm, QWidget *p_wid/*= 0*/)
 
   pm_rstrTimer = new QTimer(this);
   connect(pm_rstrTimer, SIGNAL(timeout()), this, SLOT(slot_rstrTimeout()));
+  connect(qApp, &QCoreApplication::aboutToQuit, [this](){
+     allowClose = true;
+  });
 }        
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -577,6 +580,9 @@ void Numpad::initAltCodesList()
 
 void Numpad::closeEvent(QCloseEvent *ce)
 {
+    if (allowClose)
+      return;
+
     ce->ignore();
     if (m_lastFocusWindow == (HWND)winId())
     {
@@ -587,7 +593,7 @@ void Numpad::closeEvent(QCloseEvent *ce)
         }
     }
     unsetNoActivateStyle();
-    this->showMinimized();
+    this->hide();
 }
 
 

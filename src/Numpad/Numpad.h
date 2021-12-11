@@ -122,6 +122,9 @@ private:
   QMap<int,bool> m_checkedBtns;
   QTimer *pm_rstrTimer;   
   NumpadManager *nm;
+
+  bool allowClose = false;
+
 };
 
 #endif
