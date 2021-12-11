@@ -41,7 +41,7 @@
 
 SettingsDialog::SettingsDialog(NumpadManager *p_numpadManager, Numpad *p_numpad,
                                int initBtnSize, int initSpacing, QWidget *p_wid/*= 0*/)
-: QWidget(p_wid, Qt::WindowTitleHint | Qt::WindowStaysOnTopHint),
+: QWidget(p_wid, Qt::WindowTitleHint | Qt::WindowStaysOnTopHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint),
   pm_numpadManager(p_numpadManager),
   pm_numpad(p_numpad)
 {
@@ -207,7 +207,7 @@ SettingsDialog::SettingsDialog(NumpadManager *p_numpadManager, Numpad *p_numpad,
 
   setFixedSize(sizeHint());
 
-  HWND hwnd = winId();
+  HWND hwnd = (HWND)winId();
   LONG styles = GetWindowLong(hwnd, GWL_EXSTYLE);
   SetWindowLong(hwnd, GWL_EXSTYLE, styles | WS_EX_NOACTIVATE);
 }

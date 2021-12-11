@@ -10,6 +10,7 @@
 #include <QHBoxLayout>
 #include <QApplication>
 #include <QClipboard>
+#include <QMimeData>
 
 
 DndNumpad::DndNumpad(NumpadManager *_nm, QWidget *parent) : QWidget(parent)

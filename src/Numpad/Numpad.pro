@@ -4,6 +4,12 @@ TARGET = Numpad_1.7.1
 DEPENDPATH += . Buttons
 INCLUDEPATH += . Buttons
 
+
+QT += core
+QT += gui
+QT += widgets
+
+
 # Input
 HEADERS += AboutWindow.h \
            Numpad.h \

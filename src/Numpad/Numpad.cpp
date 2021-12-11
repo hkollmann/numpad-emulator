@@ -47,8 +47,7 @@
 #pragma comment(lib,"user32.lib")
 
 Numpad::Numpad(NumpadManager *_nm, QWidget *p_wid/*= 0*/)
-: QWidget(p_wid, Qt::WindowTitleHint | Qt::WindowStaysOnTopHint
-          | Qt::WindowCloseButtonHint)
+: QWidget(p_wid, Qt::WindowTitleHint | Qt::WindowStaysOnTopHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint)
 {
     nm = _nm;    
   srand(time(0));
@@ -415,25 +414,30 @@ void Numpad::paintEvent(QPaintEvent *)
 
 ////////////////////////////////////////////////////////////////////////////////   
     
-bool Numpad::winEvent(MSG  *p_msg, long *p_result)
+bool Numpad::nativeEvent(const QByteArray &eventType, void *message, long *result)
 {
-    if (p_msg->message == WM_NCMOUSEMOVE && m_noActivateStyleSet)
-    {
-        int ncBotY = this->geometry().y();      
-        int curY = GET_Y_LPARAM(p_msg->lParam);
-        if (curY < ncBotY)
-        {
-            m_lastFocusWindow = GetForegroundWindow();
-            unsetNoActivateStyle();
-        }
-    }
+  Q_UNUSED(eventType)
+  Q_UNUSED(result)
+  // Transform the message pointer to the MSG WinAPI
+  MSG* p_msg = reinterpret_cast<MSG*>(message);
+
+  if (p_msg->message == WM_NCMOUSEMOVE && m_noActivateStyleSet)
+  {
+      int ncBotY = this->geometry().y();
+      int curY = GET_Y_LPARAM(p_msg->lParam);
+      if (curY < ncBotY)
+      {
+          m_lastFocusWindow = GetForegroundWindow();
+          unsetNoActivateStyle();
+      }
+  }
   if (p_msg->message == WM_NCLBUTTONDOWN)
   {
     if (m_noActivateStyleSet)
     {
         m_lastFocusWindow = GetForegroundWindow();
         unsetNoActivateStyle();
-        SetForegroundWindow(winId());
+        SetForegroundWindow((HWND)winId());
     } 
   }
   if (p_msg->message == WM_NCMOUSELEAVE && !this->isMinimized())
@@ -442,7 +446,7 @@ bool Numpad::winEvent(MSG  *p_msg, long *p_result)
   	if (!m_noActivateStyleSet && (leftButtonPress == 1 || leftButtonPress == 0))
     {
       setNoActivateStyle();
-      if (m_lastFocusWindow != winId())
+      if (m_lastFocusWindow != (HWND)winId())
       {
           SetForegroundWindow(m_lastFocusWindow);
       }
@@ -460,14 +464,14 @@ bool Numpad::winEvent(MSG  *p_msg, long *p_result)
   {      
       pm_rstrTimer->start(300);
   }
-  return QWidget::winEvent(p_msg, p_result);
+  return false;
 }	
 
 ////////////////////////////////////////////////////////////////////////////////
 
 void Numpad::setNoActivateStyle()
 {
-  HWND hwnd = winId();
+  HWND hwnd = (HWND)winId();
   LONG styles = GetWindowLong(hwnd, GWL_EXSTYLE);
   SetWindowLong(hwnd, GWL_EXSTYLE, styles | WS_EX_NOACTIVATE);
   m_noActivateStyleSet = true;
@@ -477,7 +481,7 @@ void Numpad::setNoActivateStyle()
 
 void Numpad::unsetNoActivateStyle()
 {
-  HWND hwnd = winId();
+  HWND hwnd = (HWND)winId();
   LONG styles = GetWindowLong(hwnd, GWL_EXSTYLE);
   SetWindowLong(hwnd, GWL_EXSTYLE, styles & ~WS_EX_NOACTIVATE);
   m_noActivateStyleSet = false;
@@ -574,7 +578,7 @@ void Numpad::initAltCodesList()
 void Numpad::closeEvent(QCloseEvent *ce)
 {
     ce->ignore();
-    if (m_lastFocusWindow == winId())
+    if (m_lastFocusWindow == (HWND)winId())
     {
         if (loseFocus())
         {

@@ -13,7 +13,7 @@ MsgBox::MsgBox(QString msg, QWidget *parent)
     setLayout(layout);
     setFixedSize(sizeHint());
 
-    HWND hwnd = winId();
+    HWND hwnd = (HWND)winId();
     LONG styles = GetWindowLong(hwnd, GWL_EXSTYLE);
     SetWindowLong(hwnd, GWL_EXSTYLE, styles | WS_EX_NOACTIVATE);
 }

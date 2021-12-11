@@ -106,7 +106,7 @@ NumpadManager::NumpadManager(QWidget *p_parent/*= 0*/)
   allBtnWid = NULL;
   
   QFontMetrics numpadFont(pm_numpad->font());
-  m_diffPosNumpadAndCursor = numpadFont.width("num");               
+  m_diffPosNumpadAndCursor = numpadFont.horizontalAdvance("num");
  
   m_keyboardHookSetGood = false;
   m_hookKeyboard = NULL;    
@@ -118,7 +118,7 @@ NumpadManager::NumpadManager(QWidget *p_parent/*= 0*/)
     SetHwnd setHwnd = (SetHwnd) GetProcAddress(m_keyboardHookDll, "setAppHwnd");
     if (setHwnd)
     {
-      setHwnd(winId());
+      setHwnd((HWND)winId());
       HOOKPROC keyboardHookProc = (HOOKPROC) GetProcAddress(m_keyboardHookDll, 
                                                            "_LowLevelKeyboardProc@12");
       if (keyboardHookProc)
@@ -138,7 +138,7 @@ NumpadManager::NumpadManager(QWidget *p_parent/*= 0*/)
   m_defaultShowHideKey = "F9";
   setShowHideKey(readKeyFromSettings());
   
-  pm_systemTray->showMessage("", "Numpad");
+//  pm_systemTray->showMessage("", "Numpad");
 
   pm_errMsgBox = NULL;
   showNewNumpad();
@@ -292,16 +292,14 @@ void NumpadManager::createSystemTray()
 
 bool NumpadManager::readAltCodeLblMode()
 {
-    return pm_settings->value("/Settings/AltCodeLblMode",
-                                          true).toBool();
+    return pm_settings->value("/Settings/AltCodeLblMode", true).toBool();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
 void NumpadManager::writeAltCodeLblMode()
 {
-    pm_settings->setValue("/Settings/AltCodeLblMode",
-                          pm_numpad->getAltCodeLblMode());
+    pm_settings->setValue("/Settings/AltCodeLblMode", pm_numpad->getAltCodeLblMode());
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -596,16 +594,22 @@ void NumpadManager::slot_systemTrayActivated(QSystemTrayIcon::ActivationReason)
 
 /////////////////////////////////////////////////////////////////////////////////
 
-bool NumpadManager::winEvent(MSG  *p_msg, long *p_result)
+bool NumpadManager::nativeEvent(const QByteArray &eventType, void *message, long *result)
 {
-  if (p_msg->message == KEYBOARDHOOKMSG)
-  {
-    if (p_msg->wParam == pm_showHideKey->winCode)
+    Q_UNUSED(eventType)
+    Q_UNUSED(result)
+    // Transform the message pointer to the MSG WinAPI
+    MSG* p_msg = reinterpret_cast<MSG*>(message);
+
+    if (p_msg->message == KEYBOARDHOOKMSG)
     {
-        slot_showHideNumpad(); //showHideNumpadThroPressKey();
+      if (p_msg->wParam == pm_showHideKey->winCode)
+      {
+          slot_showHideNumpad();
+      }
+      return true;
     }
-  }
-  return QWidget::winEvent(p_msg, p_result);
+    return false;
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -630,7 +634,7 @@ void NumpadManager::showHideNumpadThroPressKey()
     int yNumpad;
              
     RECT rectNumpad;
-    GetWindowRect(pm_numpad->winId(), &rectNumpad);
+    GetWindowRect((HWND)pm_numpad->winId(), &rectNumpad);
     int widthNumpad = rectNumpad.right - rectNumpad.left;
     int heightNumpad = rectNumpad.bottom - rectNumpad.top;
               
@@ -1400,4 +1404,5 @@ int NumpadManager::addNewBtnInfo(QString altCode, QString unicode)
     ++curStInfoIndex;
     return curStInfoIndex - 1;
 }
+
 

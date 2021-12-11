@@ -72,7 +72,8 @@ signals:
   void menuActivated();
 
 protected:
-  bool winEvent(MSG  *p_msg, long *p_result);
+  // The method for processing native events from the OS in Qt
+  bool nativeEvent(const QByteArray &eventType, void *message, long *result);
   void paintEvent(QPaintEvent *);
   void hideEvent(QHideEvent *);  
   void closeEvent(QCloseEvent *);

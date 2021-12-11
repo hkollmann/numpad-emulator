@@ -7,7 +7,7 @@
 
 
 HelpWindow::HelpWindow(QWidget *parent)
-    : QWidget(parent, Qt::WindowTitleHint | Qt::WindowStaysOnTopHint)
+    : QWidget(parent, Qt::WindowTitleHint | Qt::WindowStaysOnTopHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint)
 {
     setWindowTitle("Help");
     textBrowser = new QTextBrowser;
@@ -117,7 +117,7 @@ HelpWindow::HelpWindow(QWidget *parent)
     layout->addWidget(textBrowser);
     setLayout(layout);
 
-    HWND hwnd = winId();
+    HWND hwnd = (HWND)winId();
     LONG styles = GetWindowLong(hwnd, GWL_EXSTYLE);
     SetWindowLong(hwnd, GWL_EXSTYLE, styles | WS_EX_NOACTIVATE);
 }

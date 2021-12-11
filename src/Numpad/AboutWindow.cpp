@@ -32,7 +32,7 @@
 #include <Windows.h>
 
 AboutWindow::AboutWindow(QString _version, QWidget *p_parent /*= 0*/)
-: QWidget(p_parent, Qt::WindowTitleHint | Qt::WindowStaysOnTopHint)
+: QWidget(p_parent, Qt::WindowTitleHint | Qt::WindowStaysOnTopHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint)
 {
     version = _version;
 
@@ -96,7 +96,7 @@ AboutWindow::AboutWindow(QString _version, QWidget *p_parent /*= 0*/)
 
   setFixedSize(sizeHint());
 
-  HWND hwnd = winId();
+  HWND hwnd = (HWND)winId();
   LONG styles = GetWindowLong(hwnd, GWL_EXSTYLE);
   SetWindowLong(hwnd, GWL_EXSTYLE, styles | WS_EX_NOACTIVATE);
 }
