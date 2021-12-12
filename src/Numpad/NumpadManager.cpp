@@ -85,7 +85,7 @@ NumpadManager::NumpadManager(QWidget *p_parent/*= 0*/)
 
   m_defaultFont.setPixelSize(20);
    
-  pm_settings = new QSettings("Numpad", appName, this);
+  pm_settings = new QSettings(confFileCommonPath + "/../Numpad.ini", QSettings::IniFormat, this);
 
   pm_autoRunSettings = new QSettings ("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\"
                      "CurrentVersion\\Run", QSettings::NativeFormat, this);
