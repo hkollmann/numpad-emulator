@@ -1,0 +1,40 @@
+name: Build
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: '5.15.2'
+          host: 'windows'
+          target: 'desktop'
+          arch: 'win64_msvc2019_64'
+          cache: true
+
+      - name: Set up Visual Studio shell
+        uses: egor-tensin/vs-shell@v2
+        with:
+          arch: x64
+
+      - name: Run QMake
+        run: 'cd ./src && qmake numpad-emulator.pro'
+
+      - name: Show Content of Makefile
+        run: 'cat ./src/Makefile'
+
+      - name: Run CMake
+        run: 'cd ./src && make'
+
+      - name: Upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: numpad-emulator
+          path: ${{ github.workspace }}/src/numpad-emulator.exe
