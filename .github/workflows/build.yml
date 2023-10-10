@@ -11,8 +11,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Insatll MinGW
-        uses: egor-tensin/setup-mingw@v2
+      - name: Get CMake
+        uses: lukka/get-cmake@v3.27.7
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
