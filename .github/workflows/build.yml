@@ -11,6 +11,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Insatll MinGW
+        uses: egor-tensin/setup-mingw@v2
+
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
         with:
@@ -19,11 +22,6 @@ jobs:
           target: 'desktop'
           arch: 'win64_msvc2019_64'
           cache: true
-
-      - name: Set up Visual Studio shell
-        uses: egor-tensin/vs-shell@v2
-        with:
-          arch: x64
 
       - name: Run QMake
         run: 'cd ./src && qmake numpad-emulator.pro'
