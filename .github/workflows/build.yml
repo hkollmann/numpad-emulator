@@ -66,6 +66,9 @@ jobs:
         if: steps.cache-mxe.outputs.cache-hit != 'true'
         run: 'cd mxe && make MXE_TARGETS=x86_64-w64-mingw32.static qtbase'
 
+      - name: Set environment variable
+        run: 'echo PATH="$PATH:${{ github.workspace }}/mxe/usr/bin" >> $GITHUB_ENV'
+
       # - name: Install Qt
       #   uses: jurplel/install-qt-action@v3
       #   with:
