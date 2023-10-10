@@ -16,7 +16,8 @@ jobs:
 
       - name: Install dependencies for MXE
         run: |
-          apt-get install -y autoconf automake \
+          apt update
+          apt install -y autoconf automake \
             autopoint \
             bash \
             bison \
