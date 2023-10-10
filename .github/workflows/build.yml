@@ -11,9 +11,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Get MXE
-        run: 'git clone https://github.com/mxe/mxe.git'
-
       - name: Install dependencies for MXE
         run: |
           sudo apt-get update
@@ -54,11 +51,20 @@ jobs:
             wget \
             xz-utils
 
-      - name: Build MXE
-        run: 'cd mxe && make MXE_TARGETS=x86_64-w64-mingw32.static qtbase'
+      - name: Cache MXE
+        id: cache-mxe
+        uses: actions/cache@v3
+        with:
+          path: mxe
+          key: mxe
 
-      
-        
+      - name: Get MXE
+        if: steps.cache-mxe.outputs.cache-hit != 'true'
+        run: 'git clone https://github.com/mxe/mxe.git'
+
+      - name: Build MXE
+        if: steps.cache-mxe.outputs.cache-hit != 'true'
+        run: 'cd mxe && make MXE_TARGETS=x86_64-w64-mingw32.static qtbase'
 
       # - name: Install Qt
       #   uses: jurplel/install-qt-action@v3
@@ -69,10 +75,13 @@ jobs:
       #     arch: 'win64_msvc2019_64'
       #     cache: true
 
+      - name: show contents
+        run: 'ls mxe/usr/bin'
+
       - name: Run QMake
         run: |
           cd ./src
-          mxe/usr/bin/x86_64-w64-mingw32.static-qmake-qt5 numpad-emulator.pro
+          ../mxe/usr/bin/x86_64-w64-mingw32.static-qmake-qt5 numpad-emulator.pro
 
       # - name: Show Content of Makefile
       #   run: 'cat ./src/Makefile'
