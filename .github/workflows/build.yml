@@ -11,8 +11,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Get CMake
-        uses: lukka/get-cmake@v3.27.7
+      - name: Enable Developer Command Prompt
+        uses: ilammy/msvc-dev-cmd@v1
 
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
