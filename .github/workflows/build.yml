@@ -81,6 +81,7 @@ jobs:
         run: |
           for i in "Windows" "WindowsX" "Shlobj"; do
             find ./src -type f -exec sed -i 's/#include <$i\.h>/#include <$(echo $i | tr '[:upper:]' '[:lower:]').h>/g' {} +
+          done
 
       # - name: Show Content of Makefile
       #   run: 'cat ./src/Makefile'
