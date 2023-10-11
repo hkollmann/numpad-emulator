@@ -80,9 +80,8 @@ jobs:
             find ./src -type f -exec sed -i "s/#include <$i\.h>/#include <$(echo $i | tr '[:upper:]' '[:lower:]').h>/g" {} +
           done
 
-      - name: Run CMake
-        continue-on-error: true
-        run: 'cd ./src && make'
+      - name: Run Make
+        run: 'cd ./src && make 2> /dev/null'
 
       - name: Upload
         uses: actions/upload-artifact@v3
