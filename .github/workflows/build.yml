@@ -69,31 +69,28 @@ jobs:
       - name: Set environment variable
         run: 'echo PATH="$PATH:${{ github.workspace }}/mxe/usr/bin" >> $GITHUB_ENV'
 
-      # - name: Install Qt
-      #   uses: jurplel/install-qt-action@v3
-      #   with:
-      #     version: '5.15.2'
-      #     host: 'linux'
-      #     target: 'desktop'
-      #     arch: 'win64_msvc2019_64'
-      #     cache: true
-
       - name: show contents
         run: 'ls mxe/usr/bin'
 
-      # - name: Run QMake
-      #   run: |
-      #     cd ./src
-      #     ../mxe/usr/bin/x86_64-w64-mingw32.static-qmake-qt5 numpad-emulator.pro
+      - name: Run QMake
+        run: |
+          cd ./src
+          x86_64-w64-mingw32.static-qmake-qt5 numpad-emulator.pro
+
+      - name: Make system header file lowercase
+        run: |
+          for i in "Windows" "WindowsX" "Shlobj"; do
+            find ./src -type f -exec sed -i 's/#include <$i\.h>/#include <$(echo $i | tr '[:upper:]' '[:lower:]').h>/g' {} +
 
       # - name: Show Content of Makefile
       #   run: 'cat ./src/Makefile'
 
-      # - name: Run CMake
-      #   run: 'cd ./src && make'
+      - name: Run CMake
+        continue-on-error: true
+        run: 'cd ./src && make'
 
-      # - name: Upload
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: numpad-emulator
-      #     path: ${{ github.workspace }}/src/numpad-emulator.exe
+      - name: Upload
+        uses: actions/upload-artifact@v3
+        with:
+          name: numpad-emulator
+          path: ${{ github.workspace }}/src/install/*.exe
