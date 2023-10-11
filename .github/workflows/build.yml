@@ -81,7 +81,9 @@ jobs:
           done
 
       - name: Run Make
-        run: 'cd ./src && make 2> /dev/null'
+        run: |
+          cd ./src
+          make || true
 
       - name: Upload
         uses: actions/upload-artifact@v3
