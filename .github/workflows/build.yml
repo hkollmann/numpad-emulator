@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - main
-      - workflow_test
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -84,6 +83,7 @@ jobs:
         run: |
           cd ./src
           make || true
+          echo "Note: Ignore '...windeployqt: Not a directory' error. It is not necessary!"
 
       - name: Upload
         uses: actions/upload-artifact@v3
