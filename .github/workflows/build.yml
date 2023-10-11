@@ -69,9 +69,6 @@ jobs:
       - name: Set environment variable
         run: 'echo PATH="$PATH:${{ github.workspace }}/mxe/usr/bin" >> $GITHUB_ENV'
 
-      - name: show contents
-        run: 'ls mxe/usr/bin'
-
       - name: Run QMake
         run: |
           cd ./src
@@ -80,11 +77,8 @@ jobs:
       - name: Make system header file lowercase
         run: |
           for i in "Windows" "WindowsX" "Shlobj"; do
-            find ./src -type f -exec sed -i 's/#include <$i\.h>/#include <$(echo $i | tr '[:upper:]' '[:lower:]').h>/g' {} +
+            find ./src -type f -exec sed -i "s/#include <$i\.h>/#include <$(echo $i | tr '[:upper:]' '[:lower:]').h>/g" {} +
           done
-
-      # - name: Show Content of Makefile
-      #   run: 'cat ./src/Makefile'
 
       - name: Run CMake
         continue-on-error: true
